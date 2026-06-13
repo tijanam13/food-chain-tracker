@@ -166,7 +166,7 @@ async function getSigner() {
 }
 
 async function getReadOnlyContract() {
-    const provider = new JsonRpcProvider("https://rpc.sepolia.org");
+    const provider = new JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/609BZTCcP4nnN8UlOb_T_");
     return new Contract(PRODUCT_CONTRACT_ADDRESS, PRODUCT_CONTRACT_ABI, provider);
 }
 
