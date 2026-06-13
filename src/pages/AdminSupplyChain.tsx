@@ -295,6 +295,7 @@ const AdminSupplyChain = () => {
             );
             return;
         }
+        // Info already loaded eagerly; only fetch events if not yet loaded
         if (p.events.length === 0) {
             setProducts((prev) =>
                 prev.map((item, i) => (i === index ? { ...item, loading: true } : item))
@@ -834,16 +835,45 @@ const AdminSupplyChain = () => {
                                                 {/* QR + public link */}
                                                 <div className="flex items-center justify-between pt-2 border-t border-border/30">
                                                     <div className="p-1.5 bg-white rounded-lg">
-                                                        <QRCodeSVG value={`${APP_URL}/product/${p.qrCode}`} size={60} />
+                                                        <QRCodeSVG
+                                                            id={`qr-${p.qrCode}`}
+                                                            value={`${APP_URL}/product/${p.qrCode}`}
+                                                            size={60}
+                                                        />
                                                     </div>
-                                                    <a
-                                                        href={`/product/${p.qrCode}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center gap-1.5 text-xs text-primary hover:underline"
-                                                    >
-                                                        <QrCode className="w-3 h-3" /> Public page
-                                                    </a>
+                                                    <div className="flex items-center gap-3">
+                                                        <button
+                                                            onClick={() => {
+                                                                const svg = document.getElementById(`qr-${p.qrCode}`);
+                                                                if (!svg) return;
+                                                                const svgData = new XMLSerializer().serializeToString(svg);
+                                                                const canvas = document.createElement("canvas");
+                                                                canvas.width = 300;
+                                                                canvas.height = 300;
+                                                                const ctx = canvas.getContext("2d");
+                                                                const img = new Image();
+                                                                img.onload = () => {
+                                                                    ctx?.drawImage(img, 0, 0, 300, 300);
+                                                                    const a = document.createElement("a");
+                                                                    a.download = `${p.qrCode}.png`;
+                                                                    a.href = canvas.toDataURL("image/png");
+                                                                    a.click();
+                                                                };
+                                                                img.src = "data:image/svg+xml;base64," + btoa(svgData);
+                                                            }}
+                                                            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                                                        >
+                                                            <Download className="w-3 h-3" /> Download
+                                                        </button>
+                                                        <a
+                                                            href={`/product/${p.qrCode}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-center gap-1.5 text-xs text-primary hover:underline"
+                                                        >
+                                                            <QrCode className="w-3 h-3" /> Public page
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </motion.div>
                                         )}
