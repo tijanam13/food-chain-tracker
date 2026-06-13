@@ -1,0 +1,1 @@
+ALTER TABLE public.user_tokens ADD COLUMN IF NOT EXISTS total_points integer NOT NULL DEFAULT 0;

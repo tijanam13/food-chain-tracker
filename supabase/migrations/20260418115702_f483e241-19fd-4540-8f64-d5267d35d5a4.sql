@@ -1,0 +1,1 @@
+DELETE FROM public.used_recipes WHERE recipe_data IS NULL;

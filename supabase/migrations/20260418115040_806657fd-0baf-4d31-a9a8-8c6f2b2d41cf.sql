@@ -1,0 +1,1 @@
+ALTER TABLE public.used_recipes ADD COLUMN IF NOT EXISTS recipe_data jsonb;

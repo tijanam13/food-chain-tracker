@@ -1,0 +1,18 @@
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+BEGIN
+  INSERT INTO public.profiles (user_id, email, display_name, phone)
+  VALUES (
+    NEW.id,
+    NEW.email,
+    COALESCE(NEW.raw_user_meta_data->>'display_name', split_part(NEW.email, '@', 1)),
+    NULLIF(NEW.raw_user_meta_data->>'phone', '')
+  );
+  RETURN NEW;
+END;
+$function$;

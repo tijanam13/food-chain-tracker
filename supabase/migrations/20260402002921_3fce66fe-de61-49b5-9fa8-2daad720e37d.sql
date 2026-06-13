@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN is_premium boolean NOT NULL DEFAULT false;
