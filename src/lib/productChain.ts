@@ -1,4 +1,4 @@
-import { BrowserProvider, Contract } from "ethers";
+import { BrowserProvider, Contract, JsonRpcProvider } from "ethers";
 
 declare global {
     interface Window {
@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-export const PRODUCT_CONTRACT_ADDRESS = "0xd40BFE032544408d86EFD235F023eb35519eD16D";
+export const PRODUCT_CONTRACT_ADDRESS = "0x36CF543625a552555dFF000B93885bF192B41a92";
 
 const SEPOLIA_CHAIN_ID = "0xaa36a7";
 
@@ -166,7 +166,7 @@ async function getSigner() {
 }
 
 async function getReadOnlyContract() {
-    const provider = new BrowserProvider(window.ethereum);
+    const provider = new JsonRpcProvider("https://rpc.sepolia.org");
     return new Contract(PRODUCT_CONTRACT_ADDRESS, PRODUCT_CONTRACT_ABI, provider);
 }
 
